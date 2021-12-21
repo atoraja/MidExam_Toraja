@@ -1,0 +1,111 @@
+---
+# Elasticsearch Installing <START>
+- name: Install Elasticsearch Pre-requisites
+  yum:
+    name: java-11-openjdk-devel
+    state: present
+    update_cache: yes
+
+- name: Install Elasticsearch Repository
+  yum_repository:
+    name: Elastic_7.X_repo
+    baseurl: https://artifacts.elastic.co/packages/7.x/yum
+    gpgcheck: yes
+    gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    enabled: yes
+    description: Elastic 7.x repo
+
+- name: Add Elasticsearch GPG key
+  rpm_key:
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: Install Elasticsearch
+  yum:
+    name: elasticsearch
+    state: present
+    update_cache: yes
+# Elasticsearch Installing <END>
+
+# Logstash Installing <START>
+- name: Install Logstash
+  yum:
+    name: logstash
+    state: present
+    update_cache: yes
+# Logstash Installing <END>
+
+# Kibana Installing <START>
+- name: Install Kibana Repository
+  yum_repository:
+    name: Kibana 7.x packages
+    baseurl: https://artifacts.elastic.co/packages/7.x/yum
+    gpgcheck: yes
+    gpgkey: https://articafacts.elastic.co/GPG-KEY-elasticsearch
+    enabled: yes
+    description: Kibana-7.x
+
+- name: Install Kibana
+  yum:
+    name: kibana
+    state: present
+    update_cache: yes
+# Kibana Installing <END>
+
+
+#-----Configuration-----#
+
+
+
+# Elasticsearch Config <START>
+- name: Configure Elasticsearch Network
+  lineinfile:
+    destfile: /etc/elasticsearch/elasticsearch.yml
+    regexp: 'network.host'
+    line: 'network.hosts: localhost'
+
+- name: Configure Elasticsearch Port
+  lineinfile:
+    destfile: /etc/elasticsearch/elasticsearch.yml
+    regexp: 'http.port'
+    line: 'http.port: 9200'
+
+- name: Start Elasticsearch
+  service:
+    name: elasticsearch
+    state: started
+# Elasticsearch Config <END>
+
+# Logstash Config <START>
+- name: Configure Logstash Host
+  lineinfile:
+    destfile: /etc/logstash/logstash.yml
+    regexp: 'https.host:'
+    line: 'https.host: 127.0.0.1'
+
+- name: Start Logstash
+  service:
+    name: logstash
+    state: started
+# Logstash Config <END>
+
+# Kibana Config <START>
+- name: Configure Kibana Host
+  lineinfile:
+    destfile: /etc/kibana/kibana.yml
+    regexp: 'server.host:'
+    line: 'server.host: 0.0.0.0'
+
+- name: Configure Kibana Port
+  lineinfile:
+    destfile: /etc/kibana/kibana.yml
+    regexp: 'server.host:'
+    line: 'server.port: 5601'
+
+- name: Start Kibana
+  service:
+    name: kibana
+    state: started
+# Kibana Config <END>     
+
+# tasks file for roles/centos/ELK

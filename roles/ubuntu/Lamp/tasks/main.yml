@@ -1,0 +1,83 @@
+---
+# Apache2 Installation <START>
+- name: Install Apache2
+  apt:
+    name: apache2
+    state: latest
+    update_cache: yes
+# Apache2 Installation <END>
+
+# MySQL Installation <START>
+- name: Install MySQL
+  apt:
+    name: mysql-server
+    state: latest
+    update_cache: yes
+# MySQL Installation <END>
+
+# PHP Installation <START>
+- name: Install PHP
+  apt:
+    name:
+      - php
+      - php-mysql
+      - libapache2-mod-php
+    state: latest
+    update_cache: yes
+# PHP Installation <END>
+
+#-----CONFIGURATION-----#
+
+# Apache2 Config <START>
+- name: Add Apache HTML File
+  copy:
+    content: "Welcome to Apache"
+    dest: /var/www/html/index.html
+    owner: root
+    group: root
+    mode: '0644'
+  register: apache_index
+
+- name: Restart Apache2
+  service:
+    name: apache2
+    state: restarted
+    enabled: yes
+  when: apache_index.changed
+
+- name: Whitelist Apache2 in ufw
+  ufw:
+    rule: allow
+    port: '80'
+    proto: tcp
+# Apache2 Config <END>
+
+# MySQL Config <START>
+- name: Add MySQL HTML File
+  copy:
+    content: "Welcome to MySQL"
+    dest: /var/www/html/index1.html
+    owner: root
+    group: root
+    mode: '0644'
+  register: mysql_index
+
+- name: Start MySQL
+  service:
+    name: mysql
+    state: started
+    enabled: yes
+  when: mysql_index.changed
+# MySQL Config <END>
+
+# PHP Config <START>
+- name: Add PHP HTML File
+  copy:
+    content: "Welcome to PHP"
+    dest: /var/www/html/index2.html
+    owner: root
+    group: root
+    mode: '0644'
+# PHP Config <END>    
+
+# tasks file for roles/ubuntu/Lamp

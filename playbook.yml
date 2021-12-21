@@ -1,0 +1,14 @@
+---
+- hosts: server1
+
+  roles:
+    - ubuntu/ELK
+    - ubuntu/Nagios
+    - ubuntu/Grafana
+    - ubuntu/Lamp
+
+- hosts: centos
+
+  roles:
+    - centos/ELK
+#    - centos/grafana 
