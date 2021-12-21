@@ -12,3 +12,4 @@
   roles:
     - centos/ELK
 #    - centos/grafana 
+#    - centos/Lamp

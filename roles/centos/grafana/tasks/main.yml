@@ -3,7 +3,7 @@
 - name: Add Grafana Repository
   copy:
     src: grafana.repo
-    dest: /etc/yum.repos.d
+    dest: /etc/yum.repos.d/
 
 - name: Install Grafana
   yum:
@@ -16,16 +16,16 @@
 - name: Add Prometheus Repository
   copy:
     src: prometheus.repo
-    dest: /etc/yum.repos.d
+    dest: /etc/yum.repos.d/
 
 - name: Install Prometheus
   yum:
-    name: prometheus2
+    name: prometheus
     state: latest
     update_cache: yes
 # Prometheus Installation <END>
 
-# Infuxdb Installation <START>
+# Influxdb Installation <START>
 - name: Add Influxdb Repository
   copy:
     src: influxdb.repo
@@ -33,7 +33,7 @@
 
 - name: Install Influxdb
   yum:
-    name: influxdbd
+    name: influxdb
     state: latest
     update_cache: yes
 # Influxdb Installation <END>

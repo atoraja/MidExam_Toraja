@@ -28,6 +28,15 @@
 # Elasticsearch Installing <END>
 
 # Logstash Installing <START>
+- name: Install Logstash Repostory
+  yum_repository:
+    name: Elastic repository for 7.x packages
+    baseurl: https://artifacts.elastic.co/packages/7.x/yum
+    gpgcheck: yes
+    gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    enabled: yes
+    description: Elastic 7.x packages repo
+
 - name: Install Logstash
   yum:
     name: logstash
@@ -41,7 +50,7 @@
     name: Kibana 7.x packages
     baseurl: https://artifacts.elastic.co/packages/7.x/yum
     gpgcheck: yes
-    gpgkey: https://articafacts.elastic.co/GPG-KEY-elasticsearch
+    gpgkey: https://artifacts.elastic.co/GPG-key-elasticsearch
     enabled: yes
     description: Kibana-7.x
 
@@ -61,13 +70,13 @@
 - name: Configure Elasticsearch Network
   lineinfile:
     destfile: /etc/elasticsearch/elasticsearch.yml
-    regexp: 'network.host'
-    line: 'network.hosts: localhost'
+    regexp: 'network.host:'
+    line: 'network.host: localhost'
 
 - name: Configure Elasticsearch Port
   lineinfile:
     destfile: /etc/elasticsearch/elasticsearch.yml
-    regexp: 'http.port'
+    regexp: 'http.port:'
     line: 'http.port: 9200'
 
 - name: Start Elasticsearch
@@ -80,8 +89,8 @@
 - name: Configure Logstash Host
   lineinfile:
     destfile: /etc/logstash/logstash.yml
-    regexp: 'https.host:'
-    line: 'https.host: 127.0.0.1'
+    regexp: 'http.host:'
+    line: 'http.host: 127.0.0.1'
 
 - name: Start Logstash
   service:
